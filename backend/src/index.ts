@@ -16,3 +16,6 @@ app.use("/api/messages", messageRoutes);
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
 });
+
+// Todo: Add socket.io to the server
+// Todo: Configure this server for deployment

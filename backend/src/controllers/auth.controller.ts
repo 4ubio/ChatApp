@@ -38,13 +38,14 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
 		});
 
 		if (newUser) {
-			generateToken(newUser.id, res);
+			const token = generateToken(newUser.id);
 
 			res.status(201).json({
 				id: newUser.id,
 				fullName: newUser.fullName,
 				username: newUser.username,
 				profilePic: newUser.profilePic,
+				token
 			});
 		} else {
 			res.status(400).json({ error: "Invalid user data" });
@@ -69,13 +70,14 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 			return res.status(400).json({ error: "Invalid username or password" });
 		}
 		
-		generateToken(user.id, res);
+		const token = generateToken(user.id);
 
 		res.status(200).json({
 			id: user.id,
 			fullName: user.fullName,
 			username: user.username,
 			profilePic: user.profilePic,
+			token
 		});
 
 	} catch (error: any) {
@@ -86,7 +88,6 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
 export const logout = async (req: Request, res: Response): Promise<any> => {
 	try {
-		res.cookie("jwt", "", { maxAge: 0 });
 		res.status(200).json({ message: "Logged out successfully" });
 	} catch (error: any) {
 		console.log("Error in logout controller", error.message);
@@ -103,7 +104,7 @@ export const getMe = async (req: Request, res: Response): Promise<any> => {
 			id: user.id,
 			fullName: user.fullName,
 			username: user.username,
-			profilePic: user.profilePic,
+			profilePic: user.profilePic
 		});
 	} catch (error: any) {
 		console.log("Error in getMe controller", error.message);

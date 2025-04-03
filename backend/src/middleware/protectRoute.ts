@@ -26,11 +26,12 @@ declare global {
 // or expired, it sends a 401 Unauthorized response.
 const protectRoute = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try {
-		const token = req.cookies.jwt;
-		if (!token) {
-			return res.status(401).json({ error: "Unauthorized - No token provided" });
-		}
+		const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({ error: "Unauthorized - No token provided" });
+        }
 
+        const token = authHeader.split(" ")[1];
 		const decoded = jwt.verify(token, process.env.JWT_SECRET!) as DecodedToken;
 		if (!decoded) {
 			return res.status(401).json({ error: "Unauthorized - Invalid Token" });

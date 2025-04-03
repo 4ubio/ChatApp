@@ -30,8 +30,16 @@ export const AuthContextProvider = ({children}: {children: ReactNode}) => {
 
     useEffect(() => {
         const fetchAuthUser = async () => {
+            const token: string | null = localStorage.getItem("token");
+            if (!token) {
+                setIsLoading(false);
+                return;
+            }
+
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
+                    headers: { "Authorization": `Bearer ${token}`, }
+                });
                 const data = await res.json();
                 if (!res.ok) { throw new Error(data.error); }
                 setAuthUser(data);

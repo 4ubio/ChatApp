@@ -14,7 +14,7 @@ const useLogout = () => {
 			});
 			const data = await res.json();
 			if (!res.ok) throw new Error(data.error);
-
+			localStorage.clear();
 			setAuthUser(null);
 		} catch (error: any) {
 			toast.error(error.message);

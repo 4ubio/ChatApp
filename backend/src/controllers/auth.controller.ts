@@ -38,7 +38,6 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
 		});
 
 		if (newUser) {
-			// generate token in a sec
 			generateToken(newUser.id, res);
 
 			res.status(201).json({
@@ -87,7 +86,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
 export const logout = async (req: Request, res: Response): Promise<any> => {
 	try {
-		res.cookie("jwt", "", { maxAge: 0});
+		res.cookie("jwt", "", { maxAge: 0 });
 		res.status(200).json({ message: "Logged out successfully" });
 	} catch (error: any) {
 		console.log("Error in logout controller", error.message);
@@ -98,9 +97,7 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
 export const getMe = async (req: Request, res: Response): Promise<any> => {
 	try {
 		const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-		if (!user) {
-			return res.status(404).json({ error: "User not found" });
-		}
+		if (!user) { return res.status(404).json({ error: "User not found" }); }
 
 		res.status(200).json({
 			id: user.id,

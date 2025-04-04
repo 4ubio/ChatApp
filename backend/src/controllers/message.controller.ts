@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../db/prisma.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -52,9 +53,11 @@ export const sendMessage = async (req: Request, res: Response): Promise<any> => 
             })
         }
 
-        //Socket.io will go here
+        //Update the last message in the conversation
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if (receiverSocketId) { io.to(receiverSocketId).emit("newMessage", newMessage); }
         res.status(201).json(newMessage);
-
+        
     } catch (error: any) {
         console.error("Error sending message:", error);
         return res.status(500).json({ message: "Internal server error" });

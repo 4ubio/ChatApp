@@ -13,7 +13,7 @@ const useGetMessages = () => {
 			setMessages([]);
 			try {
                 const token: string | null = localStorage.getItem("token");
-				const res = await fetch(`/api/messages/${selectedConversation.id}`, {
+				const res = await fetch(`${import.meta.env.VITE_API_URL}/api/messages/${selectedConversation.id}`, {
                     headers: { "Authorization": `Bearer ${token}`, }
                 });
 				const data = await res.json();

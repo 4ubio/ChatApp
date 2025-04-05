@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm backend/src/index.ts"
+    "dev": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm backend/src/index.ts",
+    "build": "tsc && npm install && prisma generate --schema=./backend/prisma/schema.prisma && yarn add --cwd frontend && yarn build --cwd frontend",
+    "start": "node backend/dist/index.js"
   },
   "type": "module",
   "keywords": [],
